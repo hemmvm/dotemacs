@@ -1,0 +1,4 @@
+#name: this-as-this
+# --
+(this-as this
+  $0)

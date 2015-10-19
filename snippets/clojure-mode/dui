@@ -1,0 +1,15 @@
+#name: dui
+# --
+(defui ${1:Component}
+  static om/IQueryParams
+  (params [this]
+    {})
+
+  static om/IQuery
+  (query [this]
+    )
+
+  Object
+  (render [this]
+    (html
+      ${0:nil})))

@@ -1,0 +1,4 @@
+#name: defp
+# --
+(defprotocol $1
+  $0)

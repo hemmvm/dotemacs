@@ -1,0 +1,3 @@
+#name: global-set-key
+# --
+(global-set-key (kbd "$1") $0)

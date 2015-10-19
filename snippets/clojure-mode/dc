@@ -1,0 +1,6 @@
+#name: dc
+# --
+(defc ${1:Component}
+  r/ILifecycle
+  (render [_ {:keys [self]}]
+    [${0::div "$1"}]))

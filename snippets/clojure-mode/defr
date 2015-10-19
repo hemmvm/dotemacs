@@ -1,0 +1,4 @@
+#name: defr
+# --
+(defrecord $1 [$2]
+  $0)

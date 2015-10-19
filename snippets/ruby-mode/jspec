@@ -1,0 +1,7 @@
+#name: create-spec-file
+# --
+require 'spec_helper'
+
+describe $1 do
+  $0
+end

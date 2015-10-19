@@ -1,0 +1,8 @@
+#name: iq
+# --
+r/IQuery
+(params [_]
+  ,,,)
+
+(query [_]
+  ,,,)
