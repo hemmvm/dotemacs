@@ -108,7 +108,6 @@
 ;; Basics
 
 (require 'util)
-(require 'util--fs)
 (require 'setup--osx)
 (require 'setup--sane-defaults)
 (require 'setup--appearance)
