@@ -55,6 +55,7 @@
         paredit-raise-sexp
         paredit-reindent-defun
         paredit-semicolon
+        paredit-splice-sexp-killing-backward
         paredit-wrap-curly
         paredit-wrap-round
         paredit-wrap-square
