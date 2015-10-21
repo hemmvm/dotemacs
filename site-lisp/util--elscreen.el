@@ -8,6 +8,8 @@
 
 (defun util--elscreen/create ()
   (interactive)
+  (util--elscreen/start)
+
   (let ((buffer (current-buffer)))
     (elscreen-create)
     (switch-to-buffer buffer)))
