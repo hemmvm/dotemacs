@@ -102,7 +102,8 @@
                                    markdown-mode
                                    sass-mode
                                    json-mode
-                                   brainfuck-mode))
+                                   brainfuck-mode
+                                   lua-mode))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
