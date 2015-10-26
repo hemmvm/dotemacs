@@ -72,6 +72,7 @@
         util/comment
         util/decrement-number
         util/increment-number
+        util/join-line
         ))
 
 (setq mc/cmds-to-run-once
