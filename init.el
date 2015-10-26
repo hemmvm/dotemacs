@@ -101,7 +101,8 @@
                                    ;; Lang: Misc
                                    markdown-mode
                                    sass-mode
-                                   json-mode))
+                                   json-mode
+                                   brainfuck-mode))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
