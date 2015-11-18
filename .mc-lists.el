@@ -11,29 +11,62 @@
         c-electric-delete-forward
         c-electric-paren
         c-electric-semi&comma
+        cider-load-buffer
+        cider-switch-to-repl-buffer
         cljr-cycle-coll
         cljr-cycle-privacy
         cljr-raise-sexp
         cljr-slash
         cljr-splice-sexp-killing-backward
         cljr-thread-first-all
+        cljr-thread-last-all
         cljr-unwind
         cljr-unwind-all
+        dabbrev-expand
         electric-newline-and-maybe-indent
+        evil-append
+        evil-backward-char
+        evil-backward-sentence-begin
+        evil-backward-word-begin
         evil-change
+        evil-downcase
+        evil-find-char
+        evil-forward-char
+        evil-forward-word-begin
         evil-insert
+        evil-insert-line
         evil-invert-char
-        evil-normal-state
+        evil-join
         evil-paredit-change
         evil-paste-after
         evil-previous-line
+        evil-repeat-find-char
         evil-scroll-down
+        evil-scroll-line-up
         evil-search-forward
+        evil-upcase
+        evil-visual-line
+        evil-visual-restore
         forward-sexp
         highlight-symbol-next
+        indent-new-comment-line
+        isearch-backward-regexp
+        isearch-exit
+        isearch-forward-regexp
+        isearch-repeat-forward
         kill-region
+        kill-sexp
+        nxml-electric-slash
+        org-beginning-of-line
+        org-ctrl-c-ctrl-c
+        org-ctrl-c-star
         org-delete-char
+        org-end-of-line
         org-force-self-insert
+        org-kill-line
+        org-return-indent
+        org-self-insert-command
+        org-yank
         orgtbl-self-insert-command
         paredit-backslash
         paredit-backward
@@ -56,13 +89,17 @@
         paredit-reindent-defun
         paredit-semicolon
         paredit-splice-sexp-killing-backward
+        paredit-split-sexp
         paredit-wrap-curly
         paredit-wrap-round
         paredit-wrap-square
         paxedit-transpose-backward
         paxedit-transpose-forward
         setup--smex/run-smex
+        sh-assignment
+        tab-to-tab-stop
         undefined
+        util--clojure/eval-and-replace-region-or-last-sexp
         util--evil/motion-5-lines-down
         util--evil/motion-5-lines-up
         util--evil/save-all-buffers!
@@ -73,6 +110,9 @@
         util/decrement-number
         util/increment-number
         util/join-line
+        util/save-all-buffers!
+        util/window-toggle
+        yas-expand
         ))
 
 (setq mc/cmds-to-run-once
@@ -82,8 +122,15 @@
         evil-delete
         evil-delete-backward-word
         evil-ex
+        evil-find-char-to
+        evil-forward-word-end
         evil-mouse-drag-region
+        evil-previous-line-first-non-blank
         evil-replace
         evil-set-marker
+        evil-substitute
         haml-electric-backspace
+        isearch-printing-char
+        ruby-end-space
+        util--clojure/eval-form
         ))

@@ -1,0 +1,4 @@
+#name: dt
+# --
+(deftest test__${1:name}
+  $0)

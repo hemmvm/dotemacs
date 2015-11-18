@@ -3,7 +3,6 @@
 
 (add-to-list 'load-path "~/.emacs.d/site-lisp")
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Packages
 
@@ -104,7 +103,18 @@
                                    json-mode
                                    brainfuck-mode
                                    lua-mode
-                                   jade-mode))
+                                   jade-mode
+                                   stylus-mode
+
+                                   ;; Purescript
+                                   purescript-mode
+                                   flycheck-purescript
+                                   psci
+                                   psc-ide
+
+                                   alchemist
+                                   ruby-end
+                                   ))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -133,16 +143,7 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Quickly open files
-
-(util/global-set-keys
-  "M-RET e" (util/open-file "~/.emacs.d/init.el")
-  "M-RET a" (util/open-file "~/.config/awesome/rc.lua")
-  "M-RET z" (util/open-file "~/.zshrc"))
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Misc Keys
+;; Global keys
 
 (util/global-unset-keys
   "C-x 2"
@@ -151,6 +152,7 @@
   "C-3"
   "C-o"
   "C-x C-x"
+  "C-x f"
   "C-M-l"
   "M-y"
   "C-s"
@@ -161,6 +163,7 @@
 (util/global-set-keys
   "C-w"     'backward-kill-word
   "C-h"     'backward-delete-char-untabify
+  "M-f"     'forward-word
   "C-v"     'set-mark-command
   "M-\\"    'help
   "M-0"     'back-to-indentation
@@ -168,8 +171,14 @@
   "M-j"     'util/join-line
   "M-o"     'util/window-toggle
   "M-;"     'util/comment
-  "M-l"     'util/switch-to-previous-buffer)
+  "M-l"     'util/switch-to-previous-buffer
+  "M-SPC e" (util/open-file "~/.emacs.d/init.el")
+  "M-SPC z" (util/open-file "~/.zshrc")
+  "C-x f"   'find-file-at-point)
 
+
+(util/global-set-keys
+ "M-c" 'util/copy-to-clipboard)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; ISearch
@@ -217,7 +226,8 @@
 
 (util/global-set-keys
   "C-3" 'evil-normal-state
-  "M-E" 'evil-emacs-state)
+  "M-E" 'evil-emacs-state
+  "C-x x" 'evil-force-normal-state)
 
 (util/define-keys (list evil-insert-state-map evil-motion-state-map)
   "C-a" 'beginning-of-line
@@ -234,8 +244,11 @@
   "^"   'evil-beginning-of-line
   "L"   'evil-end-of-line
   "H"   'evil-first-non-blank
-  "C-j" 'util--evil/motion-5-lines-down
-  "C-k" 'util--evil/motion-5-lines-up)
+  "C-j" (lambda () (interactive) (message "Use M-j !"))
+  "C-k" (lambda () (interactive) (message "Use M-k !"))
+  ;; Try to get used to it...
+  "M-j" 'util--evil/motion-5-lines-down
+  "M-k" 'util--evil/motion-5-lines-up)
 
 (util/define-keys evil-normal-state-map
   "[ SPC" 'util--evil/insert-line-above
@@ -278,10 +291,10 @@
             ("n" . winner-redo)
 
             ;; Nav
-            ("h" . evil-window-left)
-            ("j" . evil-window-down)
-            ("k" . evil-window-up)
-            ("l" . evil-window-right)
+            ("h" . (lambda () (interactive) (evil-force-normal-state) (evil-window-left 1)))
+            ("j" . (lambda () (interactive) (evil-force-normal-state) (evil-window-down 1)))
+            ("k" . (lambda () (interactive) (evil-force-normal-state) (evil-window-up 1)))
+            ("l" . (lambda () (interactive) (evil-force-normal-state) (evil-window-right 1)))
 
             ;; Resize
             ("H" . shrink-window-horizontally )
@@ -315,7 +328,8 @@
 
 (util/define-keys evil-motion-state-map
   "C-f" 'ace-jump-mode
-  "C-M-l" 'ace-jump-line-mode)
+  ;; "C-M-l" 'ace-jump-line-mode
+  )
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -355,7 +369,7 @@
 (require 'setup--dired)
 
 (util/global-set-keys
-  "M-RET d" 'dired)
+  "M-SPC d" 'dired)
 
 (util/define-keys dired-mode-map
   "SPC" 'dired-find-file
@@ -379,11 +393,11 @@
   "\C-v"  'company-show-location
   "<tab>" 'company-complete
   "\C-g"  'company-abort
-  "M-f"   'helm-company
+  "M-F"   'helm-company
   "M-h"   'company-quickhelp-manual-begin)
 
 (util/define-keys company-mode-map
-  "M-f" 'helm-company)
+  "M-F" 'helm-company)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -398,10 +412,14 @@
   "C-M-i" 'paredit-forward-down
   "C-c b" 'backward-kill-sexp
   "C-c B" 'paredit-splice-sexp-killing-backward
+  "C-M-l" 'paredit-forward-slurp-sexp
+  "C-M-h" 'paredit-forward-barf-sexp
   "M-{"   'paredit-wrap-curly
   "M-["   'paredit-wrap-square)
 
 (evil-define-key 'normal evil-paredit-mode-map
+  (kbd "x") 'evil-delete-char
+  (kbd "X") 'evil-delete-backward-char
   (kbd "d") 'evil-delete
   (kbd "y") 'evil-yank
   (kbd "D") 'paredit-kill
@@ -433,6 +451,12 @@
   "M-4" 'mc/edit-lines
   "M-@" 'mc/skip-to-next-like-this
   "M-!" 'mc/skip-to-previous-like-this)
+
+(add-hook 'multiple-cursors-mode-enabled-hook
+          'evil-emacs-state)
+
+(add-hook 'multiple-cursors-mode-disabled-hook
+          'evil-force-normal-state)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -513,17 +537,18 @@
 (require 'setup--magit)
 
 (util/global-set-keys
-  "M-RET L" 'magit-log-all
-  "M-RET l" 'magit-log-current
-  "M-RET s" 'magit-status
-  "M-RET B" 'magit-blame)
+  "M-SPC L" 'magit-log-all
+  "M-SPC l" 'magit-log-current
+  "M-SPC r" (lambda () (interactive) (magit-rebase-interactive nil) (evil-emacs-state))
+  "M-SPC s" 'magit-status
+  "M-SPC B" 'magit-blame)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Flycheck
 
 (smartrep-define-key global-map
-  "M-RET f" '(("p" . 'flycheck-previous-error)
+  "M-SPC f" '(("p" . 'flycheck-previous-error)
               ("n" . 'flycheck-next-error)
               ("l" . 'flycheck-list-errors)))
 
@@ -552,7 +577,37 @@
 
 ;; Cider
 (util/define-keys cider-mode-map
-  "C-c C-c" 'util--clojure/eval-region-or-defun
+  "C-c RET" (lambda ()
+              (interactive)
+              (util--evil/save-all-buffers!)
+              (cider-interactive-eval "(do (require 'clojure.tools.namespace.repl) (clojure.tools.namespace.repl/refresh-all))")
+              (cider-test-rerun-tests))
+
+  "C-c C-c" (lambda ()
+              (interactive)
+              (util--evil/save-all-buffers!)
+              (cider-interactive-eval "(do (require 'clojure.tools.namespace.repl) (clojure.tools.namespace.repl/refresh-all))"))
+
+  "C-c SPC" (lambda ()
+              (interactive)
+              (cider-find-and-clear-repl-buffer)
+              (cider-repl-set-ns (cider-current-ns))
+              (sleep-for 0.01)
+              (cider-switch-to-repl-buffer)
+              (end-of-buffer)
+              (cider-switch-to-last-clojure-buffer)
+
+              (util--clojure/eval-form-in-repl))
+
+  "C-c c" (lambda ()
+              (interactive)
+              (cider-find-and-clear-repl-buffer)
+              (cider-switch-to-repl-buffer)
+              ;; (evil-insert 1)
+              (cider-repl-previous-input)
+              (cider-repl-return)
+              (cider-switch-to-last-clojure-buffer))
+
   "C-c e"   'util--clojure/eval-form-in-repl
   "M-e"     'util--clojure/eval-form
   "C-M-x"   'util--clojure/eval-form
@@ -562,7 +617,11 @@
 ;;  Cider Repl
 (util/define-keys cider-repl-mode-map
   "C-t"   'cider-switch-to-last-clojure-buffer
-  "C-RET" 'cider-repl-newline-and-indent)
+  "C-RET" 'cider-repl-newline-and-indent
+
+  "C-c C-f" (lambda ()
+              (interactive)
+              (cider-interactive-eval "(user/fig-init)")))
 
 ;; Cider / Cider Repl
 (util/define-keys (list cider-mode-map cider-repl-mode-map)
@@ -573,6 +632,7 @@
   "C-c d"   'cider-doc
   "C-c s"   'util--clojure/visit-error-buffer
   "C-M-e"   'util--clojure/end-of-defun
+  ;; "C-c C-r" (util--clojure/cider-cmd "(.reload (.-location js/window) true)")
   "C-c C-r" 'util--clojure/eval-and-replace-region-or-last-sexp
   "C-c h"   'util--clojure/popup-doc
   "C-c i"   (util/all-buffers-saved (util--clojure/cider-cmd "(user/system-restart!)"))
@@ -601,8 +661,9 @@
 
 (util/define-keys (list emacs-lisp-mode-map
                         cider-mode-map)
-  "C-M-j" 'paxedit-transpose-forward
-  "C-M-k" 'paxedit-transpose-backward)
+  "C-M-\\" 'paxedit-indent-buffer
+  "C-M-j"  'paxedit-transpose-forward
+  "C-M-k"  'paxedit-transpose-backward)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -641,7 +702,8 @@
 
             (util/define-keys haskell-interactive-mode-map
               "C-c C-h" 'hoogle
-              "C-t"     'haskell-interactive-switch-back)))
+              "C-t"     'haskell-interactive-switch-back
+              "C-l"     'haskell-interactive-mode-clear)))
 
 ;; Haskell Source Buffer
 (add-hook 'interactive-haskell-mode-hook
@@ -653,3 +715,84 @@
 
             (util/define-keys haskell-mode-map
               "C-c C-j" 'haskell-mode-jump-to-def-or-tag)))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Helm
+
+(with-eval-after-load "helm"
+  (util/define-keys helm-map "C-w" 'backward-kill-word))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Purescript
+
+(require 'setup--purescript)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Elixir (TODO clean up mess!)
+
+(require 'setup--elixir)
+
+(util/define-keys alchemist-iex-mode-map
+  "C-t" 'elix--switch-back-to-last-window)
+
+(util/define-keys alchemist-mode-map
+  "C-t" 'elix--switch-to-iex
+  "C-c M-i" 'elix--insert-current-line-into-iex
+  "C-c C-c" (util/all-buffers-saved (lambda ()
+                                      (alchemist-iex-compile-this-buffer)
+                                      (alchemist-report-run "mix compile"
+                                                            alchemist-mix-process-name
+                                                            alchemist-mix-buffer-name
+                                                            #'alchemist-mix-mode
+                                                            nil
+                                                            t)))
+
+  "M-e" 'alchemist-eval-print-current-line
+  "C-c C-r" (util/all-buffers-saved 'alchemist-mix-test)
+  "C-c r" (util/all-buffers-saved 'alchemist-mix-rerun-last-test)
+
+  "C-c t" 'alchemist-project-toggle-file-and-tests
+
+  "C-c >" (lambda ()
+            (interactive)
+            (elix--save-last-window)
+            (alchemist-iex-project-run))
+
+  "M-i" (lambda ()
+          (interactive)
+          (indent-according-to-mode))
+
+  "C-c a t" 'alchemist-project-toggle-file-and-tests
+  "C-c C-b" 'alchemist-goto-jump-back
+  "C-c C-j" 'alchemist-goto-definition-at-point
+  "C-c C-b" 'alchemist-goto-jump-back
+  )
+
+
+(util/define-keys (list alchemist-iex-mode-map alchemist-mode-map)
+  "C-c M-o" (lambda ()
+              (interactive)
+              (let* ((iex-buffer (get-buffer "*Alchemist-IEx*"))
+                     (iex-window (get-buffer-window iex-buffer)))
+
+                (save-window-excursion
+                  (cond
+                   (iex-window
+                    (select-window iex-window)
+                    (alchemist-iex-clear-buffer))
+
+                   (iex-buffer
+                    (util/split-and-switch-to-window-below)
+                    (switch-to-buffer iex-buffer)
+                    (alchemist-iex-clear-buffer))
+
+                   (t
+                    (message "Can't find Buffer *Alchemist-IEx*")))))))
+
+
+(util/define-keys alchemist-test-mode-map
+  "C-c C-," (util/all-buffers-saved 'alchemist-mix-test-this-buffer)
+  "C-c C-." (util/all-buffers-saved 'alchemist-mix-test-at-point))

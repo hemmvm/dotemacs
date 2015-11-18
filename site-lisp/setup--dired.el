@@ -21,7 +21,7 @@
 
 (util/define-keys dired-mode-map
   "M-s"   nil
-  "M-RET" nil
+  "M-SPC" nil
   "C-o"   nil)
 
 

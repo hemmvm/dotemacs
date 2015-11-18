@@ -13,15 +13,8 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Cljr Misc
-
-(setq cljr-suppress-middleware-warnings t)
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Cider Misc
 
-(add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
 (setq cider-repl-result-prefix ";=> ")
 (setq cider-repl-use-clojure-font-lock t)
 (setq cider-show-error-buffer nil)
@@ -33,6 +26,26 @@
 (setq cider-prompt-for-project-on-connect nil)
 (setq cider-ovelays-use-font-lock t)
 (setq cider-font-lock-dynamically '(macro core function var))
+(setq cider-repl-display-help-banner nil)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Cljr Misc
+
+(setq cljr-suppress-middleware-warnings t)
+(setq cljr-magic-requires nil)
+(setq cljr-favor-private-functions nil)
+
+(defadvice cljr-extract-function (after cljr-extract-function activate)
+  "..."
+  (paxedit-indent-buffer))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Enable eldoc
+
+(add-hook 'cider-mode-hook #'eldoc-mode)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Hooks
@@ -47,6 +60,9 @@
                  (format "lein test"))))
 
 
+
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Disable keys
 
@@ -54,8 +70,8 @@
                         cider-repl-mode-map
                         cider-test-report-mode-map)
 
-  "M-." nil
-  "M-," nil)
+                  "M-." nil
+                  "M-," nil)
 
 (util/define-keys (list cider-mode-map
                         cider-repl-mode-map)
@@ -98,6 +114,7 @@
   (future-fact 'defun)
   (pprint 'defun)
   (render 'defun)
+  (ident 'defun)
   (q/render 'defun)
   (will-update 'defun)
   (did-update 'defun)
@@ -128,6 +145,16 @@
   (params 'defun)
   (add-root! 'defun)
   (should-update 'defun)
+  (componentWillMount 'defun)
+  (componentDidMount 'defun)
+  (componentDidUpdate 'defun)
+  (componentWillUnmount 'defun)
+  (componentWillUpdate 'defun)
+  (shouldComponentUpdate 'defun)
+
+  ;; Reframe
+  (register-handler 'defun)
+  (register-sub 'defun)
 
   ;; Wrapper
   (fragment 'defun)
@@ -138,7 +165,9 @@
   (go-loop 'defun)
 
   (form-to 'defun)
-  )
+
+  (letfun 'defun)
+  (on-click 'defun))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

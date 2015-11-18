@@ -1,5 +1,5 @@
 #name: defn
 # --
 (defn ${1:name}
-  [${2:arg-list}]
+  [${2:arg}]
   $0)

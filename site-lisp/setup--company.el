@@ -9,7 +9,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Misc
 
-(setq company-idle-delay 0.15)
+(setq company-idle-delay 0.20)
 (setq company-minimum-prefix-length 1)
 
 

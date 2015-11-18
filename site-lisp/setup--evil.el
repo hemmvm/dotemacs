@@ -64,5 +64,44 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Modeline
+;; http://muublog.blogspot.de/2015/12/evil-mode-hack-for-colorful-mode-line.html
+
+(defface my-evil-state-emacs-face
+  '((t (:background "salmon" :foreground "White")))
+  "Evil Mode Emacs State Face")
+
+(defface my-evil-state-insert-face
+  '((t (:background "#00ff7f" :foreground "#333")))
+  "Evil Mode Insert State Face")
+
+(defface my-evil-state-normal-face
+  '((t (:background "#836FFF" :foreground "#333")))
+  "Evil Mode Normal Stace Face")
+
+(defface my-evil-state-visual-face
+  '((t (:background "#666" :foreground "#ccc")))
+  "Evil Mode Normal Stace Face")
+
+(defun evil-generate-mode-line-tag (&optional state)
+  "Generate the evil mode-line tag for STATE."
+  (let ((tag (evil-state-property state :tag t)))
+    ;; prepare mode-line: add tooltip
+    (if (stringp tag)
+        (propertize tag
+                    'face (cond
+                           ((string= "normal" state)
+                            'my-evil-state-normal-face)
+                           ((string= "insert" state)
+                            'my-evil-state-insert-face)
+                           ((string= "emacs" state)
+                            'my-evil-state-emacs-face)
+                           ((string= "visual" state)
+                            'my-evil-state-visual-face))
+                    'help-echo (evil-state-property state :name)
+                    'mouse-face 'mode-line-highlight)
+      tag)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (provide 'setup--evil)

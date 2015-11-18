@@ -13,7 +13,7 @@
 
 (defun util--zoom/default ()
   (interactive)
-  (set-face-attribute 'default nil :font "Ubuntu Mono" :height 170))
+  (set-face-attribute 'default nil :font "Ubuntu Mono" :height 200))
 
 (defun util--zoom/inc ()
   (interactive)
